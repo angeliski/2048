@@ -5,8 +5,6 @@ const matriz = [
   [0,0,0,0]
 ];
 
-//TODO bug na fusao - acontece quando fusao ocorre em uma posicao anterior
-
 let matrizFusao = [[],[], [], []];
 let matrizTentativas = [[],[], [], []];
 
@@ -38,7 +36,6 @@ function adicionarNumeroAleatorio() {
     }
   }
 
-  escreverMatrizNaTela();
 }
 
 function todaAMatrizEstaPreenchida() {
@@ -69,7 +66,9 @@ function moverParaCima ()  {
         || (posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) 
         && proximaPosicao(matriz, linha, coluna, movimento) != 0) || 0) {
           teveMovimento = true;
-          if((posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) || 0) && !matrizFusao[linha][coluna]) {
+          if((posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) || 0) 
+          && !matrizFusao[linha][coluna] 
+          && !proximaPosicao(matrizFusao, linha, coluna, movimento)) {
             matriz[linha][coluna] += proximaPosicao(matriz, linha, coluna, movimento) || 0;
             matrizFusao[linha][coluna] = true;
           } else if(posicaoAtual(matriz,linha,coluna) == 0 && proximaPosicao(matriz, linha, coluna, movimento) != 0){
@@ -86,7 +85,6 @@ function moverParaCima ()  {
     }
   }
   
-  escreverMatrizNaTela();
 }
 
 
@@ -104,7 +102,9 @@ function moverParaBaixo() {
         || (posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) 
         && proximaPosicao(matriz, linha, coluna, movimento) != 0) || 0) {
           teveMovimento = true;
-          if((posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) || 0) && !matrizFusao[linha][coluna]) {
+          if((posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) || 0) 
+          && !matrizFusao[linha][coluna]
+          && !proximaPosicao(matrizFusao, linha, coluna, movimento)) {
             matriz[linha][coluna] += proximaPosicao(matriz, linha, coluna, movimento) || 0;
             matrizFusao[linha][coluna] = true;
           } else if(posicaoAtual(matriz,linha,coluna) == 0 && proximaPosicao(matriz, linha, coluna, movimento) != 0){
@@ -119,7 +119,6 @@ function moverParaBaixo() {
       }
     }
   }
-  escreverMatrizNaTela();
 }
 
 function proximaPosicao(matriz, linha, coluna, movimento) {
@@ -164,7 +163,9 @@ function moverParaDireita() {
         || (posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) 
         && proximaPosicao(matriz, linha, coluna, movimento) != 0) || 0) {
           teveMovimento = true;
-          if((posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) || 0) && !matrizFusao[linha][coluna]) {
+          if((posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) || 0) 
+          && !matrizFusao[linha][coluna]
+          && !proximaPosicao(matrizFusao, linha, coluna, movimento)) {
             matriz[linha][coluna] += proximaPosicao(matriz, linha, coluna, movimento) || 0;
             matrizFusao[linha][coluna] = true;
           } else if(posicaoAtual(matriz,linha,coluna) == 0 && proximaPosicao(matriz, linha, coluna, movimento) != 0){
@@ -180,9 +181,6 @@ function moverParaDireita() {
       }
     }  
   }
-
-  
-  escreverMatrizNaTela();
 }
 
 function moverParaEsquerda () {
@@ -200,7 +198,9 @@ function moverParaEsquerda () {
         && proximaPosicao(matriz, linha, coluna, movimento) != 0) || 0){
           teveMovimento = true;
 
-          if((posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) || 0) && !matrizFusao[linha][coluna]) {
+          if((posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) || 0) 
+          && !matrizFusao[linha][coluna]
+          && !proximaPosicao(matrizFusao, linha, coluna, movimento)) {
             matriz[linha][coluna] += proximaPosicao(matriz, linha, coluna, movimento) || 0;
             matrizFusao[linha][coluna] = true;
 
@@ -217,8 +217,6 @@ function moverParaEsquerda () {
       }
     }
   }
-
-  escreverMatrizNaTela();
 }
 
 function escreverMatrizNaTela () {
@@ -233,6 +231,3 @@ function escreverMatrizNaTela () {
     pularLinha();
   }
 }
-
-//MAIN
-escreverMatrizNaTela();
