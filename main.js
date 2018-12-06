@@ -1,13 +1,14 @@
 const matriz = [
-  [2,0,2,4],
+  [0,0,0,0],
   [0,0,0,0], 
-  [2,0,0,0], 
-  [4,0,0,0]
+  [0,0,0,0], 
+  [0,0,0,0]
 ];
 
 //TODO bug na fusao - acontece quando fusao ocorre em uma posicao anterior
 
 let matrizFusao = [[],[], [], []];
+let matrizTentativas = [[],[], [], []];
 
 function escreverLinha(text) {
   document.write(text);
@@ -17,6 +18,41 @@ function pularLinha() {
     escreverLinha('<br>');
 };
 
+function adicionarNumeroAleatorio() {
+  matrizTentativas = [[],[], [], []];
+  
+  let tentarInserir = true; 
+  while(tentarInserir) {
+    let linha = Math.floor(Math.random() * 4);
+    let coluna = Math.floor(Math.random() * 4); 
+
+    if(posicaoAtual(matriz, linha, coluna) === 0 && posicaoAtual(matrizTentativas, linha, coluna) !== 'X') {
+      matriz[linha][coluna] = 2;
+      tentarInserir = false;
+    }else {
+      matrizTentativas[linha][coluna] = 'X';
+    }
+
+    if(tentarInserir && todaAMatrizEstaPreenchida()){
+      tentarInserir = false;
+    }
+  }
+
+  escreverMatrizNaTela();
+}
+
+function todaAMatrizEstaPreenchida() {
+
+  for(let linha = 0; linha < matriz.length; linha++) {
+    for (let coluna = 0; coluna < matriz[linha].length; coluna++) {
+      if (posicaoAtual(matriz, linha, coluna) === 0) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 
 function moverParaCima ()  {
   const movimento = 'cima';
@@ -24,7 +60,6 @@ function moverParaCima ()  {
   matrizFusao = [[],[], [], []];
   
   while(teveMovimento ){
-
     teveMovimento = false;
     let qtdLinhas = matriz.length - 1;
     for(let linha = 0; linha < qtdLinhas; linha++) {
@@ -33,7 +68,6 @@ function moverParaCima ()  {
        if((posicaoAtual(matriz,linha,coluna) == 0 && proximaPosicao(matriz, linha, coluna, movimento) != 0) 
         || (posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) 
         && proximaPosicao(matriz, linha, coluna, movimento) != 0) || 0) {
-
           teveMovimento = true;
           if((posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) || 0) && !matrizFusao[linha][coluna]) {
             matriz[linha][coluna] += proximaPosicao(matriz, linha, coluna, movimento) || 0;
@@ -42,10 +76,7 @@ function moverParaCima ()  {
             matriz[linha][coluna] = proximaPosicao(matriz, linha, coluna, movimento) || 0;
           }else {
             teveMovimento = false;
-          }
-          if(teveMovimento){
-            zerarProximaPosicao(matriz, linha, coluna, movimento);
-          }
+          }          
 
           if(linha + 1 <= qtdLinhas && teveMovimento) {
             zerarProximaPosicao(matriz, linha, coluna, movimento);
@@ -61,15 +92,33 @@ function moverParaCima ()  {
 
 
 function moverParaBaixo() {
-  for(let linha = matriz.length - 1; linha > 0; linha--) {
-    for (let coluna = 0; coluna < matriz[linha].length; coluna++) {
-      if(matriz[linha][coluna] == 0){
-        matriz[linha][coluna] = matriz[linha - 1][coluna] || 0;
-        matriz[linha - 1][coluna] = 0;
-      } 
+  const movimento = 'baixo';
+  let teveMovimento = true;
+  matrizFusao = [[],[], [], []];
+  
+  while(teveMovimento ) {
+    teveMovimento = false;
+    for(let linha = matriz.length - 1; linha > 0; linha--) {
+      for (let coluna = 0; coluna < matriz[linha].length; coluna++) {
+        if((posicaoAtual(matriz,linha,coluna) == 0 && proximaPosicao(matriz, linha, coluna, movimento) != 0) 
+        || (posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) 
+        && proximaPosicao(matriz, linha, coluna, movimento) != 0) || 0) {
+          teveMovimento = true;
+          if((posicaoAtual(matriz,linha,coluna) == proximaPosicao(matriz, linha, coluna, movimento) || 0) && !matrizFusao[linha][coluna]) {
+            matriz[linha][coluna] += proximaPosicao(matriz, linha, coluna, movimento) || 0;
+            matrizFusao[linha][coluna] = true;
+          } else if(posicaoAtual(matriz,linha,coluna) == 0 && proximaPosicao(matriz, linha, coluna, movimento) != 0){
+            matriz[linha][coluna] = proximaPosicao(matriz, linha, coluna, movimento) || 0;
+          }else {
+            teveMovimento = false;
+          }        
+          if(teveMovimento){
+            zerarProximaPosicao(matriz, linha, coluna, movimento);
+          }
+        } 
+      }
     }
   }
-
   escreverMatrizNaTela();
 }
 
@@ -80,6 +129,8 @@ function proximaPosicao(matriz, linha, coluna, movimento) {
     return matriz[linha][coluna + 1] || 0;
   } else if(movimento === 'cima') {
     return matriz[linha + 1][coluna] || 0;
+  } else if(movimento === 'baixo') {
+    return matriz[linha - 1][coluna];
   }
 } 
 
@@ -90,6 +141,8 @@ function zerarProximaPosicao(matriz, linha, coluna, movimento) {
     matriz[linha][coluna + 1] = 0;
   } else if(movimento === 'cima') {
     matriz[linha  + 1][coluna] = 0
+  } else if(movimento === 'baixo') {
+    matriz[linha - 1][coluna] = 0;
   }
 } 
 
