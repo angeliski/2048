@@ -1,3 +1,4 @@
+const game =  document.getElementById('game');
 const matriz = [
   [0,0,0,0],
   [0,0,0,0], 
@@ -8,8 +9,12 @@ const matriz = [
 let matrizFusao = [[],[], [], []];
 let matrizTentativas = [[],[], [], []];
 
+function clear() {
+  game.innerHTML = '';
+}
+
 function escreverLinha(text) {
-  document.write(text);
+  game.innerHTML += text;
 }
 
 function pularLinha() {
@@ -225,9 +230,42 @@ function escreverMatrizNaTela () {
   for(let linha = 0; linha < matriz.length; linha++) {
     for (let coluna = 0; coluna < matriz[linha].length; coluna++) {
       escreverLinha(' | ');
-      escreverLinha(matriz[linha][coluna]);
+      escreverLinha(matriz[linha][coluna] || '_');
     }
     escreverLinha(' | ');
     pularLinha();
   }
 }
+
+function aguardarMovimentoDoJogador(event) {
+  var key = event.keyCode ? event.keyCode : event.which;
+  let movimentoValido = false;
+  if(key === 40){
+    moverParaBaixo();
+    movimentoValido = true;
+  } else if( key === 38){
+    moverParaCima();
+    movimentoValido = true;
+  } else if( key === 39){
+    moverParaDireita();
+    movimentoValido = true;
+  } else if( key === 37){
+    moverParaEsquerda();
+    movimentoValido = true;
+  }
+
+  if(movimentoValido) {
+    clear();
+    adicionarNumeroAleatorio();
+    escreverMatrizNaTela();
+  }
+}
+
+window.onkeyup = aguardarMovimentoDoJogador;
+
+function start() {
+  adicionarNumeroAleatorio();
+  escreverMatrizNaTela();
+}
+
+start();
